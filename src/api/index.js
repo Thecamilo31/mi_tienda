@@ -55,9 +55,17 @@ export async function login(email, password) {
   })
 }
 
+export async function register(email, password, name) {
+  return apiFetch('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ email, password, name }),
+  })
+}
+
 export default {
   apiFetch,
   login,
+  register,
   setToken,
   getToken,
   clearToken,

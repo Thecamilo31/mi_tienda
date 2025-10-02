@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login'
 import Home from './pages/Home'
 import PrivateRoute from './components/PrivateRoute'
+import Registro from './pages/Registro'
 import './App.css'
 import { getToken } from './api'
 
@@ -25,6 +26,7 @@ function App() {
           
           {/* Ruta de login */}
           <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
           
           {/* Rutas protegidas */}
           <Route 
