@@ -25,7 +25,7 @@ function App() {
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
         <p>
-          Hola mundo
+          KBRN
         </p>
       </div>
       <p className="read-the-docs">
