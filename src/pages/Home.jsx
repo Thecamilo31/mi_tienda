@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import './Home.css'
+import { clearToken } from '../api'
 
 const Home = () => {
   const navigate = useNavigate()
   const userEmail = localStorage.getItem('userEmail')
 
   const handleLogout = () => {
+    clearToken()
     localStorage.removeItem('isAuthenticated')
     localStorage.removeItem('userEmail')
     navigate('/login')

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Login.css'
+import api, { setToken } from '../api'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -52,16 +53,30 @@ const Login = () => {
       return
     }
 
-    // Simulación de autenticación
-    console.log('Datos de login:', formData)
-    
-    // Por ahora, cualquier email/contraseña válida funcionará
-    // Más adelante aquí irá la lógica real de autenticación
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('userEmail', formData.email)
-    
-    // Redirigir a la página principal
-    navigate('/home')
+    // Llamar al backend
+    setServerError('')
+    setIsLoading(true)
+    api.login(formData.email, formData.password)
+      .then((data) => {
+        // Backend should return a token and optionally user info
+        // Example: { token: '...', user: { email: '...' } }
+        if (data?.token) {
+          setToken(data.token)
+          localStorage.setItem('userEmail', data.user?.email || formData.email)
+          localStorage.setItem('isAuthenticated', 'true')
+          navigate('/home')
+        } else {
+          // If no token, treat as error
+          setServerError('Respuesta inesperada del servidor')
+        }
+      })
+      .catch((err) => {
+        console.error('Login error:', err)
+        if (err?.data?.message) setServerError(err.data.message)
+        else if (err.message) setServerError(err.message)
+        else setServerError('Error al conectar con el servidor')
+      })
+      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -69,6 +84,7 @@ const Login = () => {
       <div className="login-card">
         <h2>Iniciar Sesión</h2>
         <p className="login-subtitle">Accede a tu tienda online</p>
+        {serverError && <div className="server-error">{serverError}</div>}
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -99,8 +115,8 @@ const Login = () => {
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
 
-          <button type="submit" className="login-button">
-            Iniciar Sesión
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {isLoading ? 'Conectando...' : 'Iniciar Sesión'}
           </button>
         </form>
 

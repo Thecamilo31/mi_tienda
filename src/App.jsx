@@ -3,10 +3,11 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import PrivateRoute from './components/PrivateRoute'
 import './App.css'
+import { getToken } from './api'
 
 function App() {
-  // Verificar si el usuario está autenticado
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true'
+  // Verificar si hay token guardado
+  const isAuthenticated = Boolean(getToken())
 
   return (
     <Router>
